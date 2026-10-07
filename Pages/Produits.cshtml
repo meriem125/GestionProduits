@@ -1,0 +1,55 @@
+﻿@page
+@model MonProjetFac.Pages.ProduitsModel
+@{
+    ViewData["Title"] = "Liste des Produits";
+    var totalProduits = Model.ListeProduits != null ? Model.ListeProduits.Count() : 0;
+    var prixMoyen = totalProduits > 0 ? Model.ListeProduits.Average(p => p.Prix) : 0;
+    var totalStock = totalProduits > 0 ? Model.ListeProduits.Sum(p => p.Stock) : 0;
+}
+
+<div class="container mt-4">
+    <h2>Liste des Produits</h2>
+    <p class="text-muted">Gestion du stock et des produits.</p>
+
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom du Produit</th>
+                <th>Prix (DT)</th>
+                <th>Catégorie</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListeProduits != null)
+            {
+                @foreach (var p in Model.ListeProduits)
+                {
+                    <tr>
+                        <td>@p.Id</td>
+                        <td>@p.Nom</td>
+                        <td>@p.Prix.ToString("N2") DT</td>
+                        <td>@p.Categorie?.Nom</td>
+                        <td>
+                            <span class="badge bg-success">@p.Stock en stock</span>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+        
+        <!-- Ligne du Total -->
+        <tfoot class="table-light fw-bold">
+            <tr>
+                <td>Total (@totalProduits)</td>
+                <td>-</td>
+                <td>Moy : @prixMoyen.ToString("N2") DT</td>
+                <td>-</td>
+                <td>@totalStock en stock</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <a asp-page="Create" class="btn btn-primary">Ajouter un nouveau produit</a>
+</div>
